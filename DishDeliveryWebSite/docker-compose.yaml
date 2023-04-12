@@ -11,7 +11,7 @@ services:
         ports: 
             - "5100:80"
         environment:
-            ConectionStrings__DefaultConnection: "Data Source=db;Initial Catalog==DishDeliveryWebSite;User Id=sa;Password=PaSSw0rd"
+            ConnectionStrings__DefaultConnection: "Data Source=db;Initial Catalog=DishDeliveryWebSite;User Id=sa;Password=PaSSw0rd"
 
     db:
         image: mcr.microsoft.com/mssql/server

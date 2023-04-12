@@ -37,11 +37,11 @@ namespace DishDeliveryWebSite.Persistence
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Achivment)
-                    .HasMaxLength(1)
+                    .HasMaxLength(Int16.MaxValue)
                     .HasColumnName("achivment");
 
                 entity.Property(e => e.CategoryName)
-                    .HasMaxLength(1)
+                    .HasMaxLength(Int16.MaxValue)
                     .HasColumnName("categoryName");
             });
 
@@ -54,7 +54,7 @@ namespace DishDeliveryWebSite.Persistence
                 entity.Property(e => e.CategoryId).HasColumnName("categoryId");
 
                 entity.Property(e => e.DishName)
-                    .HasMaxLength(1)
+                    .HasMaxLength(Int16.MaxValue)
                     .HasColumnName("dishName");
 
                 entity.Property(e => e.Price)
@@ -127,7 +127,7 @@ namespace DishDeliveryWebSite.Persistence
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.ProductName)
-                    .HasMaxLength(1)
+                    .HasMaxLength(Int16.MaxValue)
                     .HasColumnName("productName");
 
                 entity.Property(e => e.UnitId).HasColumnName("unitId");
@@ -149,7 +149,7 @@ namespace DishDeliveryWebSite.Persistence
                     .HasColumnName("deliveryDate");
 
                 entity.Property(e => e.DishList)
-                    .HasMaxLength(1)
+                    .HasMaxLength(Int16.MaxValue)
                     .HasColumnName("dishList");
 
                 entity.Property(e => e.TotalPrice)
@@ -171,7 +171,7 @@ namespace DishDeliveryWebSite.Persistence
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.UnitName)
-                    .HasMaxLength(1)
+                    .HasMaxLength(Int16.MaxValue)
                     .HasColumnName("unitName");
             });
 
@@ -182,23 +182,23 @@ namespace DishDeliveryWebSite.Persistence
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Address)
-                    .HasMaxLength(1)
+                    .HasMaxLength(Int16.MaxValue)
                     .HasColumnName("address");
 
                 entity.Property(e => e.Email)
-                    .HasMaxLength(1)
+                    .HasMaxLength(Int16.MaxValue)
                     .HasColumnName("email");
 
                 entity.Property(e => e.Name)
-                    .HasMaxLength(1)
+                    .HasMaxLength(Int16.MaxValue)
                     .HasColumnName("name");
 
                 entity.Property(e => e.Phone)
-                    .HasMaxLength(1)
+                    .HasMaxLength(Int16.MaxValue)
                     .HasColumnName("phone");
 
                 entity.Property(e => e.SurName)
-                    .HasMaxLength(1)
+                    .HasMaxLength(Int16.MaxValue)
                     .HasColumnName("surName");
             });
 

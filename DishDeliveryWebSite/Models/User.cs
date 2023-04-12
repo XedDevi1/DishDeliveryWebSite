@@ -14,6 +14,9 @@
         public string? Email { get; set; }
         public string? Address { get; set; }
 
+
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public virtual ICollection<Order> Orders { get; set; }
     }
 }
