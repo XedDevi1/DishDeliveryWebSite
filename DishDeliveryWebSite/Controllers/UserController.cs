@@ -19,6 +19,7 @@ namespace DishDeliveryWebSite.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> Get()
         {
+            throw new Exception("TEST");
             return Ok(_context.Users);
         }
     }
