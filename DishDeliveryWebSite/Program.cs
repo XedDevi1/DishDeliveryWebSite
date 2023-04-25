@@ -1,6 +1,8 @@
+using DishDeliveryWebSite.Extensions;
 using DishDeliveryWebSite.Helpers;
 using DishDeliveryWebSite.Middlewares;
 using DishDeliveryWebSite.Persistence;
+using DishDeliveryWebSite.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace DishDeliveryWebSite
@@ -17,6 +19,9 @@ namespace DishDeliveryWebSite
             builder.Services.AddTransient<ExceptionHandlerMiddleware>();
             builder.Services.AddDbContext<DishDeliveryContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddIdentityService(builder.Configuration);
+            builder.Services.AddScoped<TokenService>();
+            builder.Services.AddScoped<RefreshTokenService>();
 
 
             builder.Services.AddControllers();

@@ -1,9 +1,11 @@
 ﻿using DishDeliveryWebSite.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DishDeliveryWebSite.Persistence
 {
-    public partial class DishDeliveryContext : DbContext
+    public partial class DishDeliveryContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
         public DishDeliveryContext()
         {
@@ -14,6 +16,7 @@ namespace DishDeliveryWebSite.Persistence
         {
         }
 
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Dish> Dishes { get; set; } = null!;
         public virtual DbSet<DishDescription> DishDescriptions { get; set; } = null!;
@@ -29,6 +32,9 @@ namespace DishDeliveryWebSite.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<RefreshToken>()
+                .HasKey(t => new { t.UserId, t.Token});
 
             modelBuilder.Entity<Category>(entity =>
             {
@@ -179,25 +185,15 @@ namespace DishDeliveryWebSite.Persistence
             {
                 entity.ToTable("User");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-
                 entity.Property(e => e.Address)
                     .HasMaxLength(Int16.MaxValue)
                     .HasColumnName("address");
-
-                entity.Property(e => e.Email)
-                    .HasMaxLength(Int16.MaxValue)
-                    .HasColumnName("email");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(Int16.MaxValue)
                     .HasColumnName("name");
 
-                entity.Property(e => e.Phone)
-                    .HasMaxLength(Int16.MaxValue)
-                    .HasColumnName("phone");
-
-                entity.Property(e => e.SurName)
+                entity.Property(e => e.Surname)
                     .HasMaxLength(Int16.MaxValue)
                     .HasColumnName("surName");
             });
