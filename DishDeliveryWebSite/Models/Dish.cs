@@ -1,22 +1,23 @@
-﻿namespace DishDeliveryWebSite.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DishDeliveryWebSite.Models
 {
     public partial class Dish
     {
-        public Dish()
-        {
-            FoodProducts = new HashSet<FoodProduct>();
-            Orders = new HashSet<Order>();
-        }
-
         public int Id { get; set; }
-        public string? DishName { get; set; }
-        public decimal? Price { get; set; }
-        public int? CategoryId { get; set; }
+        public int CategoryId { get; set; }
+        public string DishName { get; set; }
+        public decimal Price { get; set; }
 
-        public virtual Category? Category { get; set; }
-        public virtual DishDescription IdNavigation { get; set; } = null!;
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public DishDescription DishDescription { get; set; }
 
-        public virtual ICollection<FoodProduct> FoodProducts { get; set; }
-        public virtual ICollection<Order> Orders { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public ICollection<OrderDish> Orders { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public ICollection<DishCategory> Categories { get; set; }
     }
 }
