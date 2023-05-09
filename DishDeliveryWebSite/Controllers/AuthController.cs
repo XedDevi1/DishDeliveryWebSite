@@ -1,4 +1,5 @@
-﻿using DishDeliveryWebSite.Dtos;
+﻿using DishDeliveryWebSite.constants;
+using DishDeliveryWebSite.Dtos;
 using DishDeliveryWebSite.Models;
 using DishDeliveryWebSite.Services;
 using Microsoft.AspNetCore.Http;
@@ -13,20 +14,23 @@ namespace DishDeliveryWebSite.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly TokenService _tokenService;
         private readonly RefreshTokenService _refreshTokenService;
 
-        public AuthController(UserManager<User> userManager,
-            SignInManager<User> signInManager,
+        public AuthController(SignInManager<User> signInManager,
             TokenService tokenService,
-            RefreshTokenService refreshTokenService)
+            RefreshTokenService refreshTokenService,
+            RoleManager<IdentityRole<int>> roleManager,
+            UserManager<User> userManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
             _refreshTokenService = refreshTokenService;
+            _roleManager = roleManager;
         }
 
         [HttpPost("singup")]
@@ -44,9 +48,6 @@ namespace DishDeliveryWebSite.Controllers
             {
                 return BadRequest(singUpResult.Errors);
             }
-
-            //var result = await _userManager.AddToRoleAsync(user, "");
-            //result.Succeeded
 
             return Ok();
         }
@@ -80,6 +81,28 @@ namespace DishDeliveryWebSite.Controllers
             };
 
             return result;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateUserAsync()
+        {
+            var adminRole = new IdentityRole<int>()
+            {
+                Name = AuthConstants.Role.Admin
+            };
+
+            await _roleManager.CreateAsync(adminRole);
+
+            var adminUser = new User()
+            {
+                UserName = "admin",
+                Email = "admin@gmail.com"
+            };
+
+            await _userManager.CreateAsync(adminUser, "admin_pa$$w0Rd");
+            await _userManager.AddToRoleAsync(adminUser, AuthConstants.Role.Admin);
+
+            return Ok();
         }
     }
 }

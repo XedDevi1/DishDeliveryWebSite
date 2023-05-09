@@ -4,14 +4,9 @@ namespace DishDeliveryWebSite.Models
 {
     public partial class User : IdentityUser<int>
     {
-        public User()
-        {
-            Orders = new HashSet<Order>();
-        }
-
-        public string? Name { get; set; }
-        public string? Surname { get; set; }
-        public string? Address { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Address { get; set; }
 
 
         [Newtonsoft.Json.JsonIgnore]

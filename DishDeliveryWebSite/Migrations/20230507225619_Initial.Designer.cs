@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DishDeliveryWebSite.Migrations
 {
     [DbContext(typeof(DishDeliveryContext))]
-    [Migration("20230424114608_AddedRefreshToken")]
-    partial class AddedRefreshToken
+    [Migration("20230507225619_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,23 +29,26 @@ namespace DishDeliveryWebSite.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Achivment")
                         .HasMaxLength(32767)
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("achivment");
+                        .HasColumnName("Achivment");
 
                     b.Property<string>("CategoryName")
                         .HasMaxLength(32767)
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("categoryName");
+                        .HasColumnName("CategoryName");
+
+                    b.Property<int>("DishId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("DishDeliveryWebSite.Models.Dish", b =>
@@ -53,26 +56,38 @@ namespace DishDeliveryWebSite.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int")
-                        .HasColumnName("categoryId");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("DishName")
                         .HasMaxLength(32767)
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("dishName");
+                        .HasColumnName("DishName");
 
-                    b.Property<decimal?>("Price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,0)")
-                        .HasColumnName("price");
+                        .HasColumnName("Price");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.ToTable("Dishes");
+                });
+
+            modelBuilder.Entity("DishDeliveryWebSite.Models.DishCategory", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DishId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CategoryId", "DishId");
+
+                    b.HasIndex("DishId");
+
+                    b.ToTable("DishCategory");
                 });
 
             modelBuilder.Entity("DishDeliveryWebSite.Models.DishDescription", b =>
@@ -80,54 +95,32 @@ namespace DishDeliveryWebSite.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("Calories")
+                    b.Property<int>("Calories")
                         .HasColumnType("int")
-                        .HasColumnName("calories");
+                        .HasColumnName("Calories");
 
-                    b.Property<int?>("Carbohydrates")
+                    b.Property<int>("Carbohydrates")
                         .HasColumnType("int")
-                        .HasColumnName("carbohydrates");
+                        .HasColumnName("Carbohydrates");
 
-                    b.Property<int?>("Fats")
-                        .HasColumnType("int")
-                        .HasColumnName("fats");
+                    b.Property<int>("DishId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("Protein")
+                    b.Property<int>("Fats")
                         .HasColumnType("int")
-                        .HasColumnName("protein");
+                        .HasColumnName("Fats");
+
+                    b.Property<int>("Protein")
+                        .HasColumnType("int")
+                        .HasColumnName("Protein");
 
                     b.HasKey("Id");
 
-                    b.ToTable("DishDescription", (string)null);
-                });
-
-            modelBuilder.Entity("DishDeliveryWebSite.Models.FoodProduct", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ProductName")
-                        .HasMaxLength(32767)
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("productName");
-
-                    b.Property<int?>("UnitId")
-                        .HasColumnType("int")
-                        .HasColumnName("unitId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UnitId");
-
-                    b.ToTable("FoodProducts");
+                    b.ToTable("DishDescriptions");
                 });
 
             modelBuilder.Entity("DishDeliveryWebSite.Models.Order", b =>
@@ -135,32 +128,47 @@ namespace DishDeliveryWebSite.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime?>("DeliveryDate")
+                    b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("date")
-                        .HasColumnName("deliveryDate");
+                        .HasColumnName("DeliveryDate");
 
                     b.Property<string>("DishList")
                         .HasMaxLength(32767)
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("dishList");
+                        .HasColumnName("DishList");
 
-                    b.Property<decimal?>("TotalPrice")
+                    b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,0)")
-                        .HasColumnName("totalPrice");
+                        .HasColumnName("TotalPrice");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
-                        .HasColumnName("userId");
+                        .HasColumnName("UserId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Order", (string)null);
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("DishDeliveryWebSite.Models.OrderDish", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DishId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId", "DishId");
+
+                    b.HasIndex("DishId");
+
+                    b.ToTable("OrderDish");
                 });
 
             modelBuilder.Entity("DishDeliveryWebSite.Models.RefreshToken", b =>
@@ -176,31 +184,11 @@ namespace DishDeliveryWebSite.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("DishDeliveryWebSite.Models.Unit", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("UnitName")
-                        .HasMaxLength(32767)
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("unitName");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Unit", (string)null);
-                });
-
             modelBuilder.Entity("DishDeliveryWebSite.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
@@ -210,16 +198,15 @@ namespace DishDeliveryWebSite.Migrations
                     b.Property<string>("Address")
                         .HasMaxLength(32767)
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("address");
+                        .HasColumnName("Address");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(32767)
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("email");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -233,7 +220,7 @@ namespace DishDeliveryWebSite.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(32767)
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("name");
+                        .HasColumnName("Name");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -246,11 +233,6 @@ namespace DishDeliveryWebSite.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone")
-                        .HasMaxLength(32767)
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("phone");
-
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -260,10 +242,10 @@ namespace DishDeliveryWebSite.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SurName")
+                    b.Property<string>("Surname")
                         .HasMaxLength(32767)
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("surName");
+                        .HasColumnName("Surname");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -282,43 +264,7 @@ namespace DishDeliveryWebSite.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("User", (string)null);
-                });
-
-            modelBuilder.Entity("DishesFoodProduct", b =>
-                {
-                    b.Property<int>("DishId")
-                        .HasColumnType("int")
-                        .HasColumnName("dishId");
-
-                    b.Property<int>("FoodProductId")
-                        .HasColumnType("int")
-                        .HasColumnName("foodProductId");
-
-                    b.HasKey("DishId", "FoodProductId")
-                        .HasName("PK__DishesFo__4FAEFD83985E6EA6");
-
-                    b.HasIndex("FoodProductId");
-
-                    b.ToTable("DishesFoodProducts", (string)null);
-                });
-
-            modelBuilder.Entity("MenuOrder", b =>
-                {
-                    b.Property<int>("DishId")
-                        .HasColumnType("int")
-                        .HasColumnName("dishId");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int")
-                        .HasColumnName("orderId");
-
-                    b.HasKey("DishId", "OrderId")
-                        .HasName("PK__MenuOrde__B66B6096F1139BAF");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("MenuOrder", (string)null);
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -456,30 +402,32 @@ namespace DishDeliveryWebSite.Migrations
 
             modelBuilder.Entity("DishDeliveryWebSite.Models.Dish", b =>
                 {
+                    b.HasOne("DishDeliveryWebSite.Models.DishDescription", "DishDescription")
+                        .WithOne("Dish")
+                        .HasForeignKey("DishDeliveryWebSite.Models.Dish", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DishDescription");
+                });
+
+            modelBuilder.Entity("DishDeliveryWebSite.Models.DishCategory", b =>
+                {
                     b.HasOne("DishDeliveryWebSite.Models.Category", "Category")
                         .WithMany("Dishes")
                         .HasForeignKey("CategoryId")
-                        .HasConstraintName("FK_Dishes.categoryId");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("DishDeliveryWebSite.Models.DishDescription", "IdNavigation")
-                        .WithOne("Dish")
-                        .HasForeignKey("DishDeliveryWebSite.Models.Dish", "Id")
-                        .IsRequired()
-                        .HasConstraintName("FK_Dishes.id");
+                    b.HasOne("DishDeliveryWebSite.Models.Dish", "Dish")
+                        .WithMany("Categories")
+                        .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
 
-                    b.Navigation("IdNavigation");
-                });
-
-            modelBuilder.Entity("DishDeliveryWebSite.Models.FoodProduct", b =>
-                {
-                    b.HasOne("DishDeliveryWebSite.Models.Unit", "Unit")
-                        .WithMany("FoodProducts")
-                        .HasForeignKey("UnitId")
-                        .HasConstraintName("FK_FoodProducts.unitId");
-
-                    b.Navigation("Unit");
+                    b.Navigation("Dish");
                 });
 
             modelBuilder.Entity("DishDeliveryWebSite.Models.Order", b =>
@@ -487,9 +435,29 @@ namespace DishDeliveryWebSite.Migrations
                     b.HasOne("DishDeliveryWebSite.Models.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK_Order.userId");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DishDeliveryWebSite.Models.OrderDish", b =>
+                {
+                    b.HasOne("DishDeliveryWebSite.Models.Dish", "Dish")
+                        .WithMany("Orders")
+                        .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DishDeliveryWebSite.Models.Order", "Order")
+                        .WithMany("Dishes")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dish");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("DishDeliveryWebSite.Models.RefreshToken", b =>
@@ -501,36 +469,6 @@ namespace DishDeliveryWebSite.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DishesFoodProduct", b =>
-                {
-                    b.HasOne("DishDeliveryWebSite.Models.Dish", null)
-                        .WithMany()
-                        .HasForeignKey("DishId")
-                        .IsRequired()
-                        .HasConstraintName("FK_DishesFoodProducts.dishId");
-
-                    b.HasOne("DishDeliveryWebSite.Models.FoodProduct", null)
-                        .WithMany()
-                        .HasForeignKey("FoodProductId")
-                        .IsRequired()
-                        .HasConstraintName("FK_DishesFoodProducts.foodProductId");
-                });
-
-            modelBuilder.Entity("MenuOrder", b =>
-                {
-                    b.HasOne("DishDeliveryWebSite.Models.Dish", null)
-                        .WithMany()
-                        .HasForeignKey("DishId")
-                        .IsRequired()
-                        .HasConstraintName("FK_MenuOrder.dishId");
-
-                    b.HasOne("DishDeliveryWebSite.Models.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .IsRequired()
-                        .HasConstraintName("FK_MenuOrder.orderId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -589,15 +527,21 @@ namespace DishDeliveryWebSite.Migrations
                     b.Navigation("Dishes");
                 });
 
-            modelBuilder.Entity("DishDeliveryWebSite.Models.DishDescription", b =>
+            modelBuilder.Entity("DishDeliveryWebSite.Models.Dish", b =>
                 {
-                    b.Navigation("Dish")
-                        .IsRequired();
+                    b.Navigation("Categories");
+
+                    b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("DishDeliveryWebSite.Models.Unit", b =>
+            modelBuilder.Entity("DishDeliveryWebSite.Models.DishDescription", b =>
                 {
-                    b.Navigation("FoodProducts");
+                    b.Navigation("Dish");
+                });
+
+            modelBuilder.Entity("DishDeliveryWebSite.Models.Order", b =>
+                {
+                    b.Navigation("Dishes");
                 });
 
             modelBuilder.Entity("DishDeliveryWebSite.Models.User", b =>
