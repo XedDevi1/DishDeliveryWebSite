@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DishDeliveryWebSite.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -59,7 +59,6 @@ namespace DishDeliveryWebSite.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DishId = table.Column<int>(type: "int", nullable: false),
                     Achivment = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: true),
                     CategoryName = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: true)
                 },
@@ -69,20 +68,17 @@ namespace DishDeliveryWebSite.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DishDescriptions",
+                name: "Dishes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Calories = table.Column<int>(type: "int", nullable: false),
-                    Protein = table.Column<int>(type: "int", nullable: false),
-                    Fats = table.Column<int>(type: "int", nullable: false),
-                    Carbohydrates = table.Column<int>(type: "int", nullable: false),
-                    DishId = table.Column<int>(type: "int", nullable: false)
+                    DishName = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,0)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DishDescriptions", x => x.Id);
+                    table.PrimaryKey("PK_Dishes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -232,27 +228,7 @@ namespace DishDeliveryWebSite.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Dishes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    DishName = table.Column<string>(type: "nvarchar(max)", maxLength: 32767, nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,0)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Dishes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Dishes_DishDescriptions_Id",
-                        column: x => x.Id,
-                        principalTable: "DishDescriptions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DishCategory",
+                name: "DishCategories",
                 columns: table => new
                 {
                     CategoryId = table.Column<int>(type: "int", nullable: false),
@@ -260,15 +236,38 @@ namespace DishDeliveryWebSite.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DishCategory", x => new { x.CategoryId, x.DishId });
+                    table.PrimaryKey("PK_DishCategories", x => new { x.CategoryId, x.DishId });
                     table.ForeignKey(
-                        name: "FK_DishCategory_Categories_CategoryId",
+                        name: "FK_DishCategories_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DishCategory_Dishes_DishId",
+                        name: "FK_DishCategories_Dishes_DishId",
+                        column: x => x.DishId,
+                        principalTable: "Dishes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DishDescriptions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Calories = table.Column<int>(type: "int", nullable: false),
+                    Protein = table.Column<int>(type: "int", nullable: false),
+                    Fats = table.Column<int>(type: "int", nullable: false),
+                    Carbohydrates = table.Column<int>(type: "int", nullable: false),
+                    DishId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DishDescriptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DishDescriptions_Dishes_DishId",
                         column: x => x.DishId,
                         principalTable: "Dishes",
                         principalColumn: "Id",
@@ -339,9 +338,15 @@ namespace DishDeliveryWebSite.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DishCategory_DishId",
-                table: "DishCategory",
+                name: "IX_DishCategories_DishId",
+                table: "DishCategories",
                 column: "DishId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DishDescriptions_DishId",
+                table: "DishDescriptions",
+                column: "DishId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDish_DishId",
@@ -372,7 +377,10 @@ namespace DishDeliveryWebSite.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "DishCategory");
+                name: "DishCategories");
+
+            migrationBuilder.DropTable(
+                name: "DishDescriptions");
 
             migrationBuilder.DropTable(
                 name: "OrderDish");
@@ -391,9 +399,6 @@ namespace DishDeliveryWebSite.Migrations
 
             migrationBuilder.DropTable(
                 name: "Orders");
-
-            migrationBuilder.DropTable(
-                name: "DishDescriptions");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

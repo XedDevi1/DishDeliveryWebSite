@@ -62,10 +62,6 @@ namespace DishDeliveryWebSite.Persistence
                 entity.Property(e => e.Price)
                     .HasColumnType("decimal(18, 0)")
                     .HasColumnName("Price");
-
-                entity.HasOne(d => d.DishDescription)
-                    .WithOne(p => p.Dish)
-                    .HasForeignKey<Dish>(d => d.Id);
             });
 
             modelBuilder.Entity<DishDescription>(entity =>
@@ -79,6 +75,10 @@ namespace DishDeliveryWebSite.Persistence
                 entity.Property(e => e.Fats).HasColumnName("Fats");
 
                 entity.Property(e => e.Protein).HasColumnName("Protein");
+
+                entity.HasOne(d => d.Dish)
+                    .WithOne(p => p.DishDescription)
+                    .HasForeignKey<DishDescription>(d => d.DishId);
             });
 
             modelBuilder.Entity<DishCategory>()

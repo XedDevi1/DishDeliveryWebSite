@@ -8,6 +8,8 @@
         public decimal TotalPrice { get; set; }
         public DateTime DeliveryDate { get; set; }
 
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public User User { get; set; }
 
         [Newtonsoft.Json.JsonIgnore]

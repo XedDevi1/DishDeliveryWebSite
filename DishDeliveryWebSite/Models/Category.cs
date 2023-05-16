@@ -3,7 +3,6 @@
     public partial class Category
     { 
         public int Id { get; set; }
-        public int DishId { get; set; }
         public string Achivment { get; set; }
         public string CategoryName { get; set; }
 

@@ -2,6 +2,7 @@
 using DishDeliveryWebSite.Dtos;
 using DishDeliveryWebSite.Models;
 using DishDeliveryWebSite.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,7 @@ namespace DishDeliveryWebSite.Controllers
                 Name = dto.Name,
                 Surname = dto.Surname,
                 UserName = dto.Username,
+                Address = dto.Address
             };
 
             var singUpResult = await _userManager.CreateAsync(user, dto.Password);
@@ -72,11 +74,11 @@ namespace DishDeliveryWebSite.Controllers
                 return Unauthorized();
             }
 
-            var token = _tokenService.CreateToken(user);
+            var token = _tokenService.CreateTokenAsync(user);
 
             var result = new SingInResultDto
             {
-                AccessToken = _tokenService.CreateToken(user),
+                AccessToken = await _tokenService.CreateTokenAsync(user),
                 RefreshToken = await _refreshTokenService.CreateRefreshTokenAsync(user),
             };
 

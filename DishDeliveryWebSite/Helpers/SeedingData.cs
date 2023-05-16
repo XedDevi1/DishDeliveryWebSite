@@ -15,50 +15,69 @@ namespace DishDeliveryWebSite.Helpers
 
                 context.Database.Migrate();
 
-                if (!context.Categories.Any())
+                if (!context.Dishes.Any())
                 {
-                    var categories = new List<Category>()
+                    var dishes = new List<Dish>()
                     {
-                        new Category
+                        new Dish
                         {
-                            CategoryName = "Office",
-                            Achivment = "800 ккал",
-                            DishId = 1
+                            DishName = "Глазунья с овощами",
+                            Price = 23,
                         },
-                        new Category
+                        new Dish
                         {
-                            CategoryName = "Light",
-                            Achivment = "1100 ккал"
+                            DishName = "Омлет овощной",
+                            Price = 25,
                         },
-                        new Category
+                        new Dish
                         {
-                            CategoryName = "Standart",
-                            Achivment = "1300 ккал"
+                            DishName = "Греческий салат",
+                            Price = 16,
                         },
-                        new Category
+                        new Dish
                         {
-                            CategoryName = "Medium",
-                            Achivment = "1600 ккал"
+                            DishName = "Котлеты с курицей и капустой",
+                            Price = 13.4m,
                         },
-                        new Category
+                        new Dish
                         {
-                            CategoryName = "Balance",
-                            Achivment = "2000 ккал"
+                            DishName = "Салат грибной",
+                            Price = 25,
                         },
-                        new Category
+                        new Dish
                         {
-                            CategoryName = "Strong",
-                            Achivment = "2500 ккал"
+                            DishName = "Запеченное куриное филес чечевицей",
+                            Price = 43,
                         },
-                        new Category
+                        new Dish
                         {
-                            CategoryName = "Ultra",
-                            Achivment = "3200 ккал"
+                            DishName = "Рисовая каша с мандаринами",
+                            Price = 22,
+                        },
+                        new Dish
+                        {
+                            DishName = "Цыпленок с фасолью",
+                            Price = 38,
+                        },
+                        new Dish
+                        {
+                            DishName = "Рулет из курицы с овощами и чечевицей",
+                            Price = 35,
+                        },
+                        new Dish
+                        {
+                            DishName = "Овощной салат с яблочной заправкой",
+                            Price = 25,
+                        },
+                        new Dish
+                        {
+                            DishName = "Пашот с овощами",
+                            Price = 13,
                         }
                     };
 
-                    //_context.Categories.AddRange(categories);
-                    //_context.SaveChanges();
+                    context.Dishes.AddRange(dishes);
+                    context.SaveChanges();
                 }
 
                 if (!context.DishDescriptions.Any())
@@ -155,73 +174,53 @@ namespace DishDeliveryWebSite.Helpers
                         }
                     };
 
-                    //_context.DishDescriptions.AddRange(dishDescriptions);
-                    //_context.SaveChanges();
+                    context.DishDescriptions.AddRange(dishDescriptions);
+                    context.SaveChanges();
                 }
 
-                if (!context.Dishes.Any())
+                if (!context.Categories.Any())
                 {
-                    var dishes = new List<Dish>()
+                    var categories = new List<Category>()
                     {
-                        new Dish
+                        new Category
                         {
-                            DishName = "Глазунья с овощами",
-                            Price = 23,
+                            CategoryName = "Office",
+                            Achivment = "800 ккал",
                         },
-                        new Dish
+                        new Category
                         {
-                            DishName = "Омлет овощной",
-                            Price = 25,
+                            CategoryName = "Light",
+                            Achivment = "1100 ккал"
                         },
-                        new Dish
+                        new Category
                         {
-                            DishName = "Греческий салат",
-                            Price = 16,
+                            CategoryName = "Standart",
+                            Achivment = "1300 ккал"
                         },
-                        new Dish
+                        new Category
                         {
-                            DishName = "Котлеты с курицей и капустой",
-                            Price = 13.4m,
+                            CategoryName = "Medium",
+                            Achivment = "1600 ккал"
                         },
-                        new Dish
+                        new Category
                         {
-                            DishName = "Салат грибной",
-                            Price = 25,
+                            CategoryName = "Balance",
+                            Achivment = "2000 ккал"
                         },
-                        new Dish
+                        new Category
                         {
-                            DishName = "Запеченное куриное филес чечевицей",
-                            Price = 43,
+                            CategoryName = "Strong",
+                            Achivment = "2500 ккал"
                         },
-                        new Dish
+                        new Category
                         {
-                            DishName = "Рисовая каша с мандаринами",
-                            Price = 22,
-                        },
-                        new Dish
-                        {
-                            DishName = "Цыпленок с фасолью",
-                            Price = 38,
-                        },
-                        new Dish
-                        {
-                            DishName = "Рулет из курицы с овощами и чечевицей",
-                            Price = 35,
-                        },
-                        new Dish
-                        {
-                            DishName = "Овощной салат с яблочной заправкой",
-                            Price = 25,
-                        },
-                        new Dish
-                        {
-                            DishName = "Пашот с овощами",
-                            Price = 13,
+                            CategoryName = "Ultra",
+                            Achivment = "3200 ккал"
                         }
                     };
 
-                    //_context.Dishes.AddRange(dishes);
-                    //_context.SaveChanges();
+                    context.Categories.AddRange(categories);
+                    context.SaveChanges();
                 }
 
                 if (!context.DishCategories.Any())
@@ -237,8 +236,386 @@ namespace DishDeliveryWebSite.Helpers
                         {
                             CategoryId = 1,
                             DishId = 2
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 1,
+                            DishId = 3
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 1,
+                            DishId = 4
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 1,
+                            DishId = 5
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 1,
+                            DishId = 6
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 1,
+                            DishId = 7
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 1,
+                            DishId = 8
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 1,
+                            DishId = 9
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 1,
+                            DishId = 10
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 1,
+                            DishId = 11
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 2,
+                            DishId = 1
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 2,
+                            DishId = 2
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 2,
+                            DishId = 3
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 2,
+                            DishId = 4
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 2,
+                            DishId = 5
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 2,
+                            DishId = 6
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 2,
+                            DishId = 7
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 2,
+                            DishId = 8
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 2,
+                            DishId = 9
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 2,
+                            DishId = 10
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 2,
+                            DishId = 11
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 3,
+                            DishId = 1
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 3,
+                            DishId = 2
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 3,
+                            DishId = 3
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 3,
+                            DishId = 4
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 3,
+                            DishId = 5
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 3,
+                            DishId = 6
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 3,
+                            DishId = 7
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 3,
+                            DishId = 8
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 3,
+                            DishId = 9
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 3,
+                            DishId = 10
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 3,
+                            DishId = 11
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 4,
+                            DishId = 1
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 4,
+                            DishId = 2
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 4,
+                            DishId = 3
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 4,
+                            DishId = 4
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 4,
+                            DishId = 5
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 4,
+                            DishId = 6
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 4,
+                            DishId = 7
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 4,
+                            DishId = 8
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 4,
+                            DishId = 9
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 4,
+                            DishId = 10
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 4,
+                            DishId = 11
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 5,
+                            DishId = 1
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 5,
+                            DishId = 2
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 5,
+                            DishId = 3
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 5,
+                            DishId = 4
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 5,
+                            DishId = 5
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 5,
+                            DishId = 6
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 5,
+                            DishId = 7
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 5,
+                            DishId = 8
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 5,
+                            DishId = 9
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 5,
+                            DishId = 10
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 5,
+                            DishId = 11
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 6,
+                            DishId = 1
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 6,
+                            DishId = 2
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 6,
+                            DishId = 3
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 6,
+                            DishId = 4
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 6,
+                            DishId = 5
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 6,
+                            DishId = 6
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 6,
+                            DishId = 7
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 6,
+                            DishId = 8
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 6,
+                            DishId = 9
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 6,
+                            DishId = 10
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 6,
+                            DishId = 11
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 7,
+                            DishId = 1
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 7,
+                            DishId = 2
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 7,
+                            DishId = 3
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 7,
+                            DishId = 4
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 7,
+                            DishId = 5
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 7,
+                            DishId = 6
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 7,
+                            DishId = 7
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 7,
+                            DishId = 8
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 7,
+                            DishId = 9
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 7,
+                            DishId = 10
+                        },
+                        new DishCategory
+                        {
+                            CategoryId = 7,
+                            DishId = 11
                         }
                     };
+
+                    context.DishCategories.AddRange(dishCategories);
+                    context.SaveChanges();
                 }
             }
         }

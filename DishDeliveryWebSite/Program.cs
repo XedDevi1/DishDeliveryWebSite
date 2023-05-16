@@ -27,10 +27,12 @@ namespace DishDeliveryWebSite
             builder.Services.AddTransient<ExceptionHandlerMiddleware>();
             builder.Services.AddDbContext<DishDeliveryContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             builder.Services.AddIdentityService(builder.Configuration);
             builder.Services.AddScoped<TokenService>();
             builder.Services.AddScoped<RefreshTokenService>();
             builder.Services.AddScoped<GetAllDishesService>();
+            builder.Services.AddScoped<AddOrderService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -76,6 +78,7 @@ namespace DishDeliveryWebSite
 
             var app = builder.Build();
 
+            app.Services.Seed();
             await app.Services.ApplyMigrationsForDbContext<DishDeliveryContext>();
 
             // Configure the HTTP request pipeline.
