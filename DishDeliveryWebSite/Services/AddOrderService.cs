@@ -52,10 +52,8 @@ namespace DishDeliveryWebSite.Services
 
             await _dishDeliveryContext.SaveChangesAsync();
 
-            var list0fOrderedDishes = new List<Dish>();
-
             return await _dishDeliveryContext.Orders
-                .Where(o => o.UserId == order.UserId)
+                .Where(o => o.UserId == order.Id)
                 .ProjectTo<AddOrderDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }

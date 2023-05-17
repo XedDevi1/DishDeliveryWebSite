@@ -33,6 +33,7 @@ namespace DishDeliveryWebSite
             builder.Services.AddScoped<RefreshTokenService>();
             builder.Services.AddScoped<GetAllDishesService>();
             builder.Services.AddScoped<AddOrderService>();
+            builder.Services.AddScoped<GetUserOrders>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

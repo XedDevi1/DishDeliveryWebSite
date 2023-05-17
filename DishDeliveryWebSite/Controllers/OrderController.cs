@@ -19,16 +19,25 @@ namespace DishDeliveryWebSite.Controllers
         private readonly UserManager<User> _userManager;
         private readonly AddOrderService _addOrderService;
         private readonly DishDeliveryContext _DishDeliveryContext;
+        private readonly GetUserOrders _getUserOrders;
 
-        public OrderController(AddOrderService addOrderService, DishDeliveryContext dishDeliveryContext, UserManager<User> userManager)
+        public OrderController(AddOrderService addOrderService, DishDeliveryContext dishDeliveryContext, UserManager<User> userManager, GetUserOrders getUserOrders)
         {
             _addOrderService = addOrderService;
             _DishDeliveryContext = dishDeliveryContext;
             _userManager = userManager;
+            _getUserOrders = getUserOrders;
         }
 
-        [HttpPost("api/{dishsIds:int}")]
-        public async Task<IEnumerable<AddOrderDto>> AddOrderAsync(int[] productsId)
+        [HttpGet("api/getorders")]
+        public async Task<IEnumerable<AddOrderDto>> GetAllOrders()
+        {
+            var userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
+            return await _getUserOrders.GetOrdersAsync(userId);
+        }
+
+        [HttpPost("api/orderdishs")]
+        public async Task<ICollection<AddOrderDto>> AddOrderAsync(int[] productsId)
         {
             var userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
             return await _addOrderService.AddOrderAsync(userId, productsId);
