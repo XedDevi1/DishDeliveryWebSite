@@ -1,9 +1,13 @@
-﻿using DishDeliveryWebSite.Models;
+﻿using DishDeliveryWebSite.Helpers;
+using DishDeliveryWebSite.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace DishDeliveryWebSite.Persistence
 {
-    public partial class DishDeliveryContext : DbContext
+    public partial class DishDeliveryContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
         public DishDeliveryContext()
         {
@@ -14,13 +18,12 @@ namespace DishDeliveryWebSite.Persistence
         {
         }
 
-        public virtual DbSet<Category> Categories { get; set; } = null!;
-        public virtual DbSet<Dish> Dishes { get; set; } = null!;
-        public virtual DbSet<DishDescription> DishDescriptions { get; set; } = null!;
-        public virtual DbSet<FoodProduct> FoodProducts { get; set; } = null!;
-        public virtual DbSet<Order> Orders { get; set; } = null!;
-        public virtual DbSet<Unit> Units { get; set; } = null!;
-        public virtual DbSet<User> Users { get; set; } = null!;
+        public DbSet<DishCategory> DishCategories { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<DishDescription> DishDescriptions { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Dish> Dishes { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -30,176 +33,112 @@ namespace DishDeliveryWebSite.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<RefreshToken>()
+                .HasKey(t => new { t.UserId, t.Token });
+
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.ToTable("Category");
-
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("Id");
 
                 entity.Property(e => e.Achivment)
-                    .HasMaxLength(1)
-                    .HasColumnName("achivment");
+                    .HasMaxLength(Int16.MaxValue)
+                    .HasColumnName("Achivment");
 
                 entity.Property(e => e.CategoryName)
-                    .HasMaxLength(1)
-                    .HasColumnName("categoryName");
+                    .HasMaxLength(Int16.MaxValue)
+                    .HasColumnName("CategoryName");
             });
 
             modelBuilder.Entity<Dish>(entity =>
             {
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
-
-                entity.Property(e => e.CategoryId).HasColumnName("categoryId");
+                    .HasColumnName("Id");
 
                 entity.Property(e => e.DishName)
-                    .HasMaxLength(1)
-                    .HasColumnName("dishName");
+                    .HasMaxLength(Int16.MaxValue)
+                    .HasColumnName("DishName");
 
                 entity.Property(e => e.Price)
                     .HasColumnType("decimal(18, 0)")
-                    .HasColumnName("price");
-
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.Dishes)
-                    .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK_Dishes.categoryId");
-
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.Dish)
-                    .HasForeignKey<Dish>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Dishes.id");
-
-                entity.HasMany(d => d.FoodProducts)
-                    .WithMany(p => p.Dishes)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "DishesFoodProduct",
-                        l => l.HasOne<FoodProduct>().WithMany().HasForeignKey("FoodProductId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_DishesFoodProducts.foodProductId"),
-                        r => r.HasOne<Dish>().WithMany().HasForeignKey("DishId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_DishesFoodProducts.dishId"),
-                        j =>
-                        {
-                            j.HasKey("DishId", "FoodProductId").HasName("PK__DishesFo__4FAEFD83985E6EA6");
-
-                            j.ToTable("DishesFoodProducts");
-
-                            j.IndexerProperty<int>("DishId").HasColumnName("dishId");
-
-                            j.IndexerProperty<int>("FoodProductId").HasColumnName("foodProductId");
-                        });
-
-                entity.HasMany(d => d.Orders)
-                    .WithMany(p => p.Dishes)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "MenuOrder",
-                        l => l.HasOne<Order>().WithMany().HasForeignKey("OrderId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_MenuOrder.orderId"),
-                        r => r.HasOne<Dish>().WithMany().HasForeignKey("DishId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_MenuOrder.dishId"),
-                        j =>
-                        {
-                            j.HasKey("DishId", "OrderId").HasName("PK__MenuOrde__B66B6096F1139BAF");
-
-                            j.ToTable("MenuOrder");
-
-                            j.IndexerProperty<int>("DishId").HasColumnName("dishId");
-
-                            j.IndexerProperty<int>("OrderId").HasColumnName("orderId");
-                        });
+                    .HasColumnName("Price");
             });
 
             modelBuilder.Entity<DishDescription>(entity =>
             {
-                entity.ToTable("DishDescription");
+                entity.Property(e => e.Id).HasColumnName("Id");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Calories).HasColumnName("Calories");
 
-                entity.Property(e => e.Calories).HasColumnName("calories");
+                entity.Property(e => e.Carbohydrates).HasColumnName("Carbohydrates");
 
-                entity.Property(e => e.Carbohydrates).HasColumnName("carbohydrates");
+                entity.Property(e => e.Fats).HasColumnName("Fats");
 
-                entity.Property(e => e.Fats).HasColumnName("fats");
+                entity.Property(e => e.Protein).HasColumnName("Protein");
 
-                entity.Property(e => e.Protein).HasColumnName("protein");
+                entity.HasOne(d => d.Dish)
+                    .WithOne(p => p.DishDescription)
+                    .HasForeignKey<DishDescription>(d => d.DishId);
             });
 
-            modelBuilder.Entity<FoodProduct>(entity =>
-            {
-                entity.Property(e => e.Id).HasColumnName("id");
+            modelBuilder.Entity<DishCategory>()
+                .HasKey(dc => new {dc.CategoryId, dc.DishId});
 
-                entity.Property(e => e.ProductName)
-                    .HasMaxLength(1)
-                    .HasColumnName("productName");
+            modelBuilder.Entity<DishCategory>()
+                .HasOne(d => d.Dish)
+                .WithMany(d => d.Categories)
+                .HasForeignKey(d => d.DishId);
 
-                entity.Property(e => e.UnitId).HasColumnName("unitId");
-
-                entity.HasOne(d => d.Unit)
-                    .WithMany(p => p.FoodProducts)
-                    .HasForeignKey(d => d.UnitId)
-                    .HasConstraintName("FK_FoodProducts.unitId");
-            });
+            modelBuilder.Entity<DishCategory>()
+                .HasOne(c => c.Category)
+                .WithMany(c => c.Dishes)
+                .HasForeignKey(c => c.CategoryId);
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.ToTable("Order");
-
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("Id");
 
                 entity.Property(e => e.DeliveryDate)
                     .HasColumnType("date")
-                    .HasColumnName("deliveryDate");
+                    .HasColumnName("DeliveryDate");
 
                 entity.Property(e => e.DishList)
-                    .HasMaxLength(1)
-                    .HasColumnName("dishList");
+                    .HasMaxLength(Int16.MaxValue)
+                    .HasColumnName("DishList");
 
                 entity.Property(e => e.TotalPrice)
                     .HasColumnType("decimal(18, 0)")
-                    .HasColumnName("totalPrice");
+                    .HasColumnName("TotalPrice");
 
-                entity.Property(e => e.UserId).HasColumnName("userId");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_Order.userId");
+                entity.Property(e => e.UserId).HasColumnName("UserId");
             });
 
-            modelBuilder.Entity<Unit>(entity =>
-            {
-                entity.ToTable("Unit");
+            modelBuilder.Entity<OrderDish>()
+                .HasKey(dc => new { dc.OrderId, dc.DishId });
 
-                entity.Property(e => e.Id).HasColumnName("id");
+            modelBuilder.Entity<OrderDish>()
+                .HasOne(d => d.Dish)
+                .WithMany(d => d.Orders)
+                .HasForeignKey(d => d.DishId);
 
-                entity.Property(e => e.UnitName)
-                    .HasMaxLength(1)
-                    .HasColumnName("unitName");
-            });
+            modelBuilder.Entity<OrderDish>()
+                .HasOne(c => c.Order)
+                .WithMany(c => c.Dishes)
+                .HasForeignKey(c => c.OrderId);
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.ToTable("User");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
                 entity.Property(e => e.Address)
-                    .HasMaxLength(1)
-                    .HasColumnName("address");
-
-                entity.Property(e => e.Email)
-                    .HasMaxLength(1)
-                    .HasColumnName("email");
+                    .HasMaxLength(Int16.MaxValue)
+                    .HasColumnName("Address");
 
                 entity.Property(e => e.Name)
-                    .HasMaxLength(1)
-                    .HasColumnName("name");
+                    .HasMaxLength(Int16.MaxValue)
+                    .HasColumnName("Name");
 
-                entity.Property(e => e.Phone)
-                    .HasMaxLength(1)
-                    .HasColumnName("phone");
-
-                entity.Property(e => e.SurName)
-                    .HasMaxLength(1)
-                    .HasColumnName("surName");
+                entity.Property(e => e.Surname)
+                    .HasMaxLength(Int16.MaxValue)
+                    .HasColumnName("Surname");
             });
 
             OnModelCreatingPartial(modelBuilder);
